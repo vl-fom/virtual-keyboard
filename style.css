@@ -42,3 +42,27 @@ body {
 .button:active {
   transform: translate(1px, 1px);
 }
+
+button[data-key-code="CapsLock"]::before,
+button[data-key-code="ShiftLeft"]::before,
+button[data-key-code="ShiftRight"]::before,
+button[data-key-code="ControlLeft"]::before,
+button[data-key-code="ControlRight"]::before,
+button[data-key-code="AltLeft"]::before,
+button[data-key-code="AltRight"]::before {
+  content: "\2022";
+  color: #0e0d0d;
+  font-weight: bold;
+  display: inline-block; 
+  width: 1em;
+}
+
+button[data-key-code="CapsLock"].active::before,
+button[data-key-code="ShiftLeft"].active::before,
+button[data-key-code="ShiftRight"].active::before,
+button[data-key-code="ControlLeft"].active::before,
+button[data-key-code="ControlRight"].active::before,
+button[data-key-code="AltLeft"].active::before,
+button[data-key-code="AltRight"].active::before {
+  color: #ff0000;
+}
