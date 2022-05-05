@@ -7,7 +7,8 @@ body {
 }
 
 .textarea {
-  width: 100vw;
+  width: 100%;
+  max-width: 100%;
 }
 
 .keyboard-wrapper {
@@ -21,15 +22,17 @@ body {
 
 .line-wrapper {
   display: flex;
-  gap: 5px;
+  justify-content:space-evenly;
   width: 100%;
   height: calc(100% - 20px);
   background-color: #197758;
 }
 
 .button {
-  min-width: 32px;
+  min-width: 6.15%;
+  width: 50px;
   margin: 2px;
+  flex-basis: 1;
 }
 
 .button.pressed {
