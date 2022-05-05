@@ -131,13 +131,11 @@ function pressButton (data) {
 }
 
 function insertDataByCaretPosition (data) {
-  textarea.focus();
   let caretPosition = getCaretPosition ().start
   let message = textarea.innerHTML.split('')
   message.splice(getCaretPosition().start, (getCaretPosition().end - getCaretPosition().start), data)
   textarea.innerHTML = message.join('');
   textarea.setSelectionRange(caretPosition + data.length, caretPosition + data.length)
-  textarea.focus()
 }
 
 function clearButton (data) {
@@ -149,6 +147,7 @@ function clearButton (data) {
   }
   const button = document.querySelector(`[data-key-code="${code}"]`)
   button.classList.remove('pressed');
+  textarea.focus()
 }
 
 // let a = {}
@@ -158,7 +157,6 @@ function clearButton (data) {
 // console.log(codes.en.lower.Backslash.toUpperCase())
 
 function getCaretPosition () {
-  // textarea.focus()
   if (textarea.selectionStart || textarea.selectionStart == '0') {
     return {'start': textarea.selectionStart, 'end': textarea.selectionEnd };
   } else {
