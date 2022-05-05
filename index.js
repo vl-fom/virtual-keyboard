@@ -6,6 +6,8 @@ const textarea = document.createElement('textarea');
 const keyboardWrapper = document.createElement('div');
 let lang = 'en';
 let keyCase = 'lower';
+let isCapsLockPressed = false
+
 
 const clear = document.querySelector('.clear');
 clear.addEventListener('click', () => textarea.innerHTML = '')
@@ -78,13 +80,22 @@ body.append(keyboardWrapper)
 // let a = {}
 // firstLine.forEach(el => a[el] = 1)
 // console.log(Object.keys(codes['en']['lower']))
+const capsLock = document.querySelector('[data-key-code="CapsLock"]');
 
 
 const test = document.querySelector('.test')
 test.addEventListener('click', () => {
-  textarea.setSelectionRange(1, 1)
-  console.log(getCaretPosition())
-  textarea.focus()
+  let letters =  Array.prototype.slice.call(keyboardWrapper.querySelectorAll('button'))
+  letters = letters.filter(btn => btn.dataset.keyCode.startsWith('Key'))
+  console.log('isCapsLockPressed = ', isCapsLockPressed)
+  console.log(letters)
+  if (isCapsLockPressed === false) {
+    isCapsLockPressed = true;
+    letters.forEach(letter => letter.innerHTML = letter.innerHTML.toUpperCase())
+  } else {
+    isCapsLockPressed = false;
+    letters.forEach(letter => letter.innerHTML = letter.innerHTML.toLowerCase())
+  }
 })
 
 
@@ -99,19 +110,39 @@ function pressButton (data) {
   }
   const button = document.querySelector(`[data-key-code="${code}"]`)
   button.classList.add('pressed');
+  let caretPosition, message;
   switch (code) {
     case 'Backspace':
-      textarea.innerHTML = textarea.innerHTML.slice(0, -1)
+      caretPosition = getCaretPosition ().start
+      message = textarea.innerHTML.split('')
+      if (caretPosition > 0) {
+        message.splice(caretPosition - 1, 1)
+      } else {
+        break;
+      }
+      textarea.innerHTML = message.join('');
+      textarea.setSelectionRange(caretPosition - 1, caretPosition - 1)
+      break;
+    case 'Delete':
+      caretPosition = getCaretPosition ().start
+      message = textarea.innerHTML.split('')
+      if (caretPosition < message.length) {
+        message.splice(caretPosition, 1)
+      }
+      textarea.innerHTML = message.join('');
+      textarea.setSelectionRange(caretPosition, caretPosition)
       break;
     case 'Space':
-      textarea.innerHTML += ' '
+      insertData (' ')
+      break;
+    case 'CapsLock':
+      pressCapsLock ()
       break;
     case 'Tab':
-      textarea.innerHTML += '    '
+      insertData ('\t')
       break;
     case 'Enter':
-      // textarea.innerHTML += '\n'
-      insertDataByCaretPosition ('\n')
+      insertData ('\n')
       break;
     case 'ControlLeft':
     case 'ControlRight':
@@ -126,14 +157,14 @@ function pressButton (data) {
       textarea.innerHTML += ''
       break;
     default:
-      insertDataByCaretPosition (button.innerHTML)
+      insertData (button.innerHTML)
   }
 }
 
-function insertDataByCaretPosition (data) {
+function insertData (data) {
   let caretPosition = getCaretPosition ().start
   let message = textarea.innerHTML.split('')
-  message.splice(getCaretPosition().start, (getCaretPosition().end - getCaretPosition().start), data)
+  message.splice(caretPosition, (getCaretPosition().end - caretPosition), data)
   textarea.innerHTML = message.join('');
   textarea.setSelectionRange(caretPosition + data.length, caretPosition + data.length)
 }
@@ -161,6 +192,19 @@ function getCaretPosition () {
     return {'start': textarea.selectionStart, 'end': textarea.selectionEnd };
   } else {
     return {'start': 0, 'end': 0};
+  }
+}
+
+function pressCapsLock () {
+  capsLock.classList.toggle('active')
+  let letters =  Array.prototype.slice.call(keyboardWrapper.querySelectorAll('button'))
+  letters = letters.filter(btn => btn.dataset.keyCode.startsWith('Key'))
+  if (isCapsLockPressed === false) {
+    isCapsLockPressed = true;
+    letters.forEach(letter => letter.innerHTML = letter.innerHTML.toUpperCase())
+  } else {
+    isCapsLockPressed = false;
+    letters.forEach(letter => letter.innerHTML = letter.innerHTML.toLowerCase())
   }
 }
 
