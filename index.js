@@ -108,8 +108,12 @@ function pressButton (data) {
   } else if (typeof data === 'string'){
     code = data
   }
+  if (!document.querySelector(`[data-key-code="${code}"]`)) {
+    return;
+  }
   const button = document.querySelector(`[data-key-code="${code}"]`)
   button.classList.add('pressed');
+  console.log('pressButton', code)
   let caretPosition, message;
   switch (code) {
     case 'Backspace':
@@ -176,6 +180,9 @@ function clearButton (data) {
   } else if (typeof data === 'string'){
     code = data
   }
+  if (!document.querySelector(`[data-key-code="${code}"]`)) {
+    return;
+  }
   const button = document.querySelector(`[data-key-code="${code}"]`)
   button.classList.remove('pressed');
   textarea.focus()
@@ -212,6 +219,7 @@ window.addEventListener('keydown', event => {
   if (event.key) {
     pressButton(event)
   }
+  // console.log(event)
 })
 keyboardWrapper.addEventListener('mousedown', event => {
   if (event.target.dataset.keyCode) {
@@ -222,6 +230,7 @@ window.addEventListener('keyup', event => {
   if (event.key) {
     clearButton(event)
   }
+  // console.log('addEventListener2')
 })
 keyboardWrapper.addEventListener('mouseup', event => {
   if (event.target.dataset.keyCode) {

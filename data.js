@@ -57,7 +57,7 @@ const codes = {
       'Comma': ',',
       'Period': '.',
       'Slash': '/',
-      'ArrowUp': '^',
+      'ArrowUp': '&uarr;',
       'ShiftRight': 'Shift',
 
       'ControlLeft': 'Ctrl',
@@ -66,9 +66,9 @@ const codes = {
       'Space': 'Space',
       'AltRight': 'Alt',
       'ControlRight': 'Ctrl',
-      'ArrowLeft': '<==',
-      'ArrowDown': 'v',
-      'ArrowRight': '==>'
+      'ArrowLeft': '&larr;',
+      'ArrowDown': '&darr;',
+      'ArrowRight': '&rarr;'
     },
 
     'upper': {
@@ -128,7 +128,7 @@ const codes = {
       'Comma': '<',
       'Period': '>',
       'Slash': '?',
-      'ArrowUp': '^',
+      'ArrowUp': '&uarr;',
       'ShiftRight': 'Shift',
 
       'ControlLeft': 'Ctrl',
@@ -137,9 +137,9 @@ const codes = {
       'Space': 'Space',
       'AltRight': 'Alt',
       'ControlRight': 'Ctrl',
-      'ArrowLeft': '<==',
-      'ArrowDown': 'v',
-      'ArrowRight': '==>'
+      'ArrowLeft': '&larr;',
+      'ArrowDown': '&darr;',
+      'ArrowRight': '&rarr;'
     }
   }
 }
