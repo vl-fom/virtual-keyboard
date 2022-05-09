@@ -1,13 +1,16 @@
 // const codes = require('./data')
-
+const htmlEntities = {
+  "&amp;": "&",
+  "&lt;": `\<`,
+  "&gt;": ">",
+}
 
 const body = document.querySelector('body');
 const textarea = document.createElement('textarea');
 const keyboardWrapper = document.createElement('div');
-let lang = 'en';
-let keyCase = 'lower';
-let isCapsLockPressed = false
-
+let [lang, keyCase] = ['en', 'lower'];
+let [isCapsLockPressed, isShiftPressed, isControlPressed, isAltPressed] = [false, false,  false, false];
+// console.log(lang, keyCase)
 
 const clear = document.querySelector('.clear');
 clear.addEventListener('click', () => textarea.innerHTML = '')
@@ -32,6 +35,7 @@ class Button {
 
 textarea.classList.add('textarea');
 textarea.rows = 7;
+textarea.cols = 50;
 textarea.autofocus = true
 
 // textarea.addEventListener('click', () => console.log(textarea.value))
@@ -81,24 +85,60 @@ body.append(keyboardWrapper)
 // firstLine.forEach(el => a[el] = 1)
 // console.log(Object.keys(codes['en']['lower']))
 const capsLock = document.querySelector('[data-key-code="CapsLock"]');
+const shiftLeft = keyboardWrapper.querySelector('[data-key-code="ShiftLeft"]');
+const shiftRight = keyboardWrapper.querySelector('[data-key-code="ShiftRight"]');
+const controlLeft = keyboardWrapper.querySelector('[data-key-code="ControlLeft"]');
+const controlRight = document.querySelector('[data-key-code="ControlRight"]');
+const altLeft = keyboardWrapper.querySelector('[data-key-code="AltLeft"]');
+const altRight = document.querySelector('[data-key-code="AltRight"]');
+// ShiftRight.addEventListener('keyup', () => {
+//   console.log('sjfjks')
+//   unshift ()
+// })
 
+
+function updateKeyboard () {
+  keyboardWrapper.querySelectorAll('button').forEach(el => el.innerHTML = codes[lang][keyCase][el.dataset.keyCode])
+}
 
 const test = document.querySelector('.test')
 test.addEventListener('click', () => {
-  let letters =  Array.prototype.slice.call(keyboardWrapper.querySelectorAll('button'))
-  letters = letters.filter(btn => btn.dataset.keyCode.startsWith('Key'))
-  console.log('isCapsLockPressed = ', isCapsLockPressed)
-  console.log(letters)
-  if (isCapsLockPressed === false) {
-    isCapsLockPressed = true;
-    letters.forEach(letter => letter.innerHTML = letter.innerHTML.toUpperCase())
+  if (lang === 'en') {
+    lang = 'ru'
   } else {
-    isCapsLockPressed = false;
-    letters.forEach(letter => letter.innerHTML = letter.innerHTML.toLowerCase())
+    lang = 'en'
   }
+  updateKeyboard ()
 })
 
+function shift () {
+  shiftLeft.classList.add('active')
+  isShiftPressed = true;
+  keyCase = 'upper'
+  updateKeyboard ()
+}
 
+function unshift () {
+  shiftLeft.classList.remove('active')
+  isShiftPressed = false;
+  keyCase = 'lower';
+  updateKeyboard ()
+}
+
+function changeLang () {
+  if (isAltPressed === true && isControlPressed === true) {
+    if (lang === 'en') {
+      lang = 'ru'
+    } else {
+      lang = 'en'
+    }
+    updateKeyboard ()
+    isAltPressed = false;
+    isControlPressed = false;
+    [controlLeft, altLeft].forEach(el => el.classList.remove('active'))
+    
+  }
+}
 
 function pressButton (data) {
   let code;
@@ -113,7 +153,6 @@ function pressButton (data) {
   }
   const button = document.querySelector(`[data-key-code="${code}"]`)
   button.classList.add('pressed');
-  console.log('pressButton', code)
   let caretPosition, message;
   switch (code) {
     case 'Backspace':
@@ -136,29 +175,45 @@ function pressButton (data) {
       textarea.innerHTML = message.join('');
       textarea.setSelectionRange(caretPosition, caretPosition)
       break;
-    case 'Space':
-      insertData (' ')
-      break;
-    case 'CapsLock':
-      pressCapsLock ()
-      break;
     case 'Tab':
       insertData ('\t')
+      break;
+    case 'Space':
+      insertData (' ')
       break;
     case 'Enter':
       insertData ('\n')
       break;
+    case 'CapsLock':
+      pressCapsLock ()
+      break;
     case 'ControlLeft':
     case 'ControlRight':
-      textarea.innerHTML += ''
+      if (isControlPressed) {
+        isControlPressed = false
+      } else {
+        isControlPressed = true
+      }
+      controlLeft.classList.toggle('active')
+      changeLang ()
       break;
     case 'AltLeft':
     case 'AltRight':
-      textarea.innerHTML += ''
+      if (isAltPressed) {
+        isAltPressed = false
+      } else {
+        isAltPressed = true
+      }
+      altLeft.classList.toggle('active')
+      changeLang ()
       break;
     case 'ShiftLeft':
     case 'ShiftRight':
-      textarea.innerHTML += ''
+      if (isShiftPressed) {
+        unshift ()
+      } else {
+        shift ();
+      }
       break;
     default:
       insertData (button.innerHTML)
@@ -166,11 +221,18 @@ function pressButton (data) {
 }
 
 function insertData (data) {
+  // console.log(data)
+  // if (Object.keys(htmlEntities).includes(data)) {
+  //   data = htmlEntities[data]
+  // }
+  
+  // console.log(decode)
   let caretPosition = getCaretPosition ().start
   let message = textarea.innerHTML.split('')
   message.splice(caretPosition, (getCaretPosition().end - caretPosition), data)
   textarea.innerHTML = message.join('');
-  textarea.setSelectionRange(caretPosition + data.length, caretPosition + data.length)
+  // textarea.setSelectionRange(caretPosition + data.length, caretPosition + data.length)
+  textarea.setSelectionRange(caretPosition + 1, caretPosition + 1)
 }
 
 function clearButton (data) {
@@ -187,12 +249,6 @@ function clearButton (data) {
   button.classList.remove('pressed');
   textarea.focus()
 }
-
-// let a = {}
-// window.addEventListener('keydown', event => {a[`${event.code}`]=`${event.key}`
-
-// console.log(a)})
-// console.log(codes.en.lower.Backslash.toUpperCase())
 
 function getCaretPosition () {
   if (textarea.selectionStart || textarea.selectionStart == '0') {
@@ -230,7 +286,7 @@ window.addEventListener('keyup', event => {
   if (event.key) {
     clearButton(event)
   }
-  // console.log('addEventListener2')
+  
 })
 keyboardWrapper.addEventListener('mouseup', event => {
   if (event.target.dataset.keyCode) {

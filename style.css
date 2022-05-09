@@ -22,7 +22,7 @@ body {
 
 .line-wrapper {
   display: flex;
-  justify-content:space-evenly;
+  justify-content:space-between;
   width: 100%;
   height: calc(100% - 20px);
   background-color: #197758;
@@ -30,6 +30,7 @@ body {
 
 .button {
   min-width: 6.15%;
+  min-height: 36px;
   width: 50px;
   margin: 2px;
   /* flex-basis: 1; */
@@ -39,17 +40,30 @@ body {
   background-color: brown;
 }
 
-.button:active {
-  transform: translate(1px, 1px);
+.button:active,
+.button.pressed {
+  border: 1px solid #292929;
+  border-radius: 2px;
+  transform: translate(1.5px, 1px);
+}
+
+button[data-key-code="CapsLock"],
+button[data-key-code="ShiftLeft"],
+button[data-key-code="ShiftRight"],
+button[data-key-code="ControlLeft"],
+button[data-key-code="ControlRight"],
+button[data-key-code="AltLeft"],
+button[data-key-code="AltRight"] {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 button[data-key-code="CapsLock"]::before,
 button[data-key-code="ShiftLeft"]::before,
-button[data-key-code="ShiftRight"]::before,
 button[data-key-code="ControlLeft"]::before,
-button[data-key-code="ControlRight"]::before,
-button[data-key-code="AltLeft"]::before,
-button[data-key-code="AltRight"]::before {
+button[data-key-code="AltLeft"]::before {
+  margin-left: -0.5em;
   content: "\2022";
   color: #0e0d0d;
   font-weight: bold;
@@ -65,4 +79,12 @@ button[data-key-code="ControlRight"].active::before,
 button[data-key-code="AltLeft"].active::before,
 button[data-key-code="AltRight"].active::before {
   color: #ff0000;
+}
+
+button[data-key-code="Space"] {
+  width: 290px;
+}
+
+button[data-key-code="Backspace"] {
+  width: 110px;
 }
