@@ -30,7 +30,7 @@ const codes = {
       'BracketLeft': '[',
       'BracketRight': ']',
       'Backslash': '\\',
-      'Delete': 'Delete',
+      'Delete': 'Del',
 
       'CapsLock': 'Caps Lock',
       'KeyA': 'a',
@@ -101,7 +101,7 @@ const codes = {
       'BracketLeft': '{',
       'BracketRight': '}',
       'Backslash': '\|',
-      'Delete': 'Delete',
+      'Delete': 'Del',
 
       'CapsLock': 'Caps Lock',
       'KeyA': 'A',
@@ -174,7 +174,7 @@ const codes = {
       'BracketLeft': 'х',
       'BracketRight': 'ъ',
       'Backslash': '\\',
-      'Delete': 'Delete',
+      'Delete': 'Del',
 
       'CapsLock': 'Caps Lock',
       'KeyA': 'ф',
@@ -245,7 +245,7 @@ const codes = {
       'BracketLeft': 'Х',
       'BracketRight': 'Ъ',
       'Backslash': '/',
-      'Delete': 'Delete',
+      'Delete': 'Del',
 
       'CapsLock': 'Caps Lock',
       'KeyA': 'Ф',
