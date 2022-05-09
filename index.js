@@ -1,19 +1,18 @@
 // const codes = require('./data')
-const htmlEntities = {
-  "&amp;": "&",
-  "&lt;": `\<`,
-  "&gt;": ">",
-}
 
 const body = document.querySelector('body');
 const textarea = document.createElement('textarea');
 const keyboardWrapper = document.createElement('div');
-let [lang, keyCase] = ['en', 'lower'];
+// let [lang, keyCase] = ['en', 'lower'];
+let lang = 'en';
+let keyCase = 'lower'
 let [isCapsLockPressed, isShiftPressed, isControlPressed, isAltPressed] = [false, false,  false, false];
-// console.log(lang, keyCase)
 
 const clear = document.querySelector('.clear');
 clear.addEventListener('click', () => textarea.innerHTML = '')
+
+window.addEventListener('load', getLocalStorage());
+window.addEventListener('beforeunload', setLocalStorage);
 
 class Button {
   constructor (dataAttr) {
@@ -33,12 +32,22 @@ class Button {
   }
 }
 
+function setLocalStorage () {
+  localStorage.setItem('lang', lang);
+}
+
+function getLocalStorage () {
+  if (localStorage.getItem('lang')) {
+      lang = localStorage.getItem('lang');
+  }
+}
+
+
 textarea.classList.add('textarea');
 textarea.rows = 7;
 textarea.cols = 50;
 textarea.autofocus = true
 
-// textarea.addEventListener('click', () => console.log(textarea.value))
 body.append(textarea)
 
 keyboardWrapper.classList.add('keyboard-wrapper');
@@ -48,31 +57,31 @@ for (let i = 1; i <= 5; i++) {
   lineWraper.classList.add('line-wrapper', `line-wraper-${i}`);
   switch (i) {
     case 1: 
-      Object.keys(codes['en']['lower']).slice(0, 14).forEach(el => {
+      Object.keys(codes[lang]['lower']).slice(0, 14).forEach(el => {
         const button = new Button (el);
         lineWraper.append(button.createButton())
       });
       break;
     case 2: 
-      Object.keys(codes['en']['lower']).slice(14, 29).forEach(el => {
+      Object.keys(codes[lang]['lower']).slice(14, 29).forEach(el => {
         const button = new Button (el);
         lineWraper.append(button.createButton())
       });
       break;
     case 3: 
-      Object.keys(codes['en']['lower']).slice(29, 42).forEach(el => {
+      Object.keys(codes[lang]['lower']).slice(29, 42).forEach(el => {
         const button = new Button (el);
         lineWraper.append(button.createButton())
       });
       break;
     case 4: 
-      Object.keys(codes['en']['lower']).slice(42, 55).forEach(el => {
+      Object.keys(codes[lang]['lower']).slice(42, 55).forEach(el => {
         const button = new Button (el);
         lineWraper.append(button.createButton())
       });
       break;
     case 5: 
-      Object.keys(codes['en']['lower']).slice(55).forEach(el => {
+      Object.keys(codes[lang]['lower']).slice(55).forEach(el => {
         const button = new Button (el);
         lineWraper.append(button.createButton())
       });
@@ -81,9 +90,6 @@ for (let i = 1; i <= 5; i++) {
   keyboardWrapper.append(lineWraper);
 }
 body.append(keyboardWrapper)
-// let a = {}
-// firstLine.forEach(el => a[el] = 1)
-// console.log(Object.keys(codes['en']['lower']))
 const capsLock = document.querySelector('[data-key-code="CapsLock"]');
 const shiftLeft = keyboardWrapper.querySelector('[data-key-code="ShiftLeft"]');
 const shiftRight = keyboardWrapper.querySelector('[data-key-code="ShiftRight"]');
@@ -91,10 +97,6 @@ const controlLeft = keyboardWrapper.querySelector('[data-key-code="ControlLeft"]
 const controlRight = document.querySelector('[data-key-code="ControlRight"]');
 const altLeft = keyboardWrapper.querySelector('[data-key-code="AltLeft"]');
 const altRight = document.querySelector('[data-key-code="AltRight"]');
-// ShiftRight.addEventListener('keyup', () => {
-//   console.log('sjfjks')
-//   unshift ()
-// })
 
 
 function updateKeyboard () {
@@ -102,6 +104,7 @@ function updateKeyboard () {
 }
 
 const test = document.querySelector('.test')
+
 test.addEventListener('click', () => {
   if (lang === 'en') {
     lang = 'ru'
@@ -187,6 +190,8 @@ function pressButton (data) {
     case 'CapsLock':
       pressCapsLock ()
       break;
+    case 'MetaLeft':
+      break;
     case 'ControlLeft':
     case 'ControlRight':
       if (isControlPressed) {
@@ -221,17 +226,10 @@ function pressButton (data) {
 }
 
 function insertData (data) {
-  // console.log(data)
-  // if (Object.keys(htmlEntities).includes(data)) {
-  //   data = htmlEntities[data]
-  // }
-  
-  // console.log(decode)
   let caretPosition = getCaretPosition ().start
   let message = textarea.innerHTML.split('')
   message.splice(caretPosition, (getCaretPosition().end - caretPosition), data)
   textarea.innerHTML = message.join('');
-  // textarea.setSelectionRange(caretPosition + data.length, caretPosition + data.length)
   textarea.setSelectionRange(caretPosition + 1, caretPosition + 1)
 }
 
@@ -275,7 +273,6 @@ window.addEventListener('keydown', event => {
   if (event.key) {
     pressButton(event)
   }
-  // console.log(event)
 })
 keyboardWrapper.addEventListener('mousedown', event => {
   if (event.target.dataset.keyCode) {
