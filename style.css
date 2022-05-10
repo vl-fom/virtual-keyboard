@@ -1,0 +1,103 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  margin: 0;
+}
+
+p,
+h2 {
+  text-align: center;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 768px;
+}
+
+.textarea {
+  width: 100%;
+  max-width: 100%;
+}
+
+.keyboard-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+  height: auto;
+  background-color: #3b3b3b;
+}
+
+.line-wrapper {
+  display: flex;
+  justify-content:space-between;
+  width: 100%;
+  height: calc(100% - 20px);
+  background-color: #3b3b3b;
+}
+
+.button {
+  min-width: 6.15%;
+  min-height: 36px;
+  width: 50px;
+  margin: 2px;
+}
+
+.button.pressed {
+  background-color: brown;
+}
+
+.button:active,
+.button.pressed {
+  border: 1px solid #292929;
+  border-radius: 2px;
+  transform: translate(1.5px, 1px);
+}
+
+button[data-key-code="CapsLock"],
+button[data-key-code="ShiftLeft"],
+button[data-key-code="ShiftRight"],
+button[data-key-code="ControlLeft"],
+button[data-key-code="ControlRight"],
+button[data-key-code="AltLeft"],
+button[data-key-code="AltRight"] {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+button[data-key-code="CapsLock"]::before,
+button[data-key-code="ShiftLeft"]::before,
+button[data-key-code="ControlLeft"]::before,
+button[data-key-code="AltLeft"]::before {
+  margin-left: -0.5em;
+  content: "\2022";
+  color: #0e0d0d;
+  font-weight: bold;
+  display: inline-block; 
+  width: 1em;
+}
+
+button[data-key-code="CapsLock"].active::before,
+button[data-key-code="ShiftLeft"].active::before,
+button[data-key-code="ShiftRight"].active::before,
+button[data-key-code="ControlLeft"].active::before,
+button[data-key-code="ControlRight"].active::before,
+button[data-key-code="AltLeft"].active::before,
+button[data-key-code="AltRight"].active::before {
+  color: #ff0000;
+}
+
+button[data-key-code="Space"] {
+  width: 290px;
+}
+
+button[data-key-code="Backspace"] {
+  width: 110px;
+}
