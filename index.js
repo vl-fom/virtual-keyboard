@@ -1,4 +1,6 @@
-const codes = { // можно сразу свернуть
+// I'm sorry for sending link on deploy. Here's the link on PR: https://github.com/vl-fom/virtual-keyboard/pull/1
+
+const codes = {
   en: {
     lower: {
       Backquote: '`',
